@@ -5,7 +5,13 @@ object PhoneBill {
     val log = """00:01:07,406-234-090
                 00:05:01,701-080-080
                 00:05:00,406-234-090"""
-    solution(log)
+    val log2 = """00:01:07,406-234-090
+                00:05:01,701-080-080
+                00:05:00,406-234-090
+                00:01:07,407-234-090
+                00:05:01,701-080-080
+                00:05:00,407-234-090"""
+    println("The total cost is: " + solution(log))
   }
 
   def stringToTuples(logs: Array[String]): Seq[(String, Int)] = {
@@ -18,47 +24,27 @@ object PhoneBill {
 
   def solution(s: String): Int = {
     val logs: Array[String] = s.split("\n").map(_.trim)
-//    println(logs.toList)
     val logsMap = stringToTuples(logs) groupBy (_._1) mapValues (_ map (_._2))
-    val mapNoMax: Map[String, Int] = logsMap.map(x => (x._1 -> x._2.sum))
-    println(mapNoMax)
-    val maxVal: (String, Int) = mapNoMax.maxBy(_._2)
-    val totCost: Int = mapNoMax.map(x => costMap(x, maxVal)).sum
-    println(totCost)
-
-    val durs: Array[String] = logs.map(_.split(",")(0).trim)
-    val uniNo: Array[String] = logs.map(_.split(",")(1).trim)
-    //println(uniNo.groupBy(identity).mapValues(_.size) + "lllll")
-    println(uniNo.groupBy(identity).mapValues(_.size) + "lllll")
-    val maxKey = uniNo.maxBy(_(1))  // (a,100)
-
-    val costTotal = logs.map(x => cost(x, maxKey)).sum
-    println(costTotal)
-
-    2
+    val mapNoMax: Map[Int, Int] = logsMap.map(x => (numberToInt(x._1) -> x._2.sum))
+    val maxVal: (Int, Int) = mapNoMax.maxBy(_._2)
+    println(maxVal)
+    mapNoMax.map(x => costMap(x, maxVal)).sum
+  }
+  def numberToInt(noString: String): Int = {
+    noString.replaceAll("[\\s\\-]", "").toInt
   }
   def toSecs(tString: String): Int = {
     val timeVal: Array[Int] = tString.split(":").map(_.toInt)
     val secs = (timeVal(0) * 60 * 60) + (timeVal(1) * 60) + timeVal(2)
     secs
   }
-  def costMap(log: (String, Int), max: (String, Int)): Int = {
+  def costMap(log: (Int, Int), max: (Int, Int)): Int = {
       if(max == log) return 0
       else {
         val secs = log._2
-        if(secs < (5 * 60 * 60)) 3 * secs
-        else (secs / 60) * 150
+        if(secs < 5 * 60) 3 * secs
+        else if(secs == 5 * 60) (secs / 60) * 150
+        else ((secs / 60) + 1) * 150
       }
-  }
-  def cost(log: String, max: String): Int = {
-    if(max == log.split(",")(1).trim) return 0
-    else {
-      val dur = log.split(",")(0).trim
-      val timeVal: Array[Int] = dur.split(":").map(_.toInt)
-      val secs = (timeVal(0) * 60 * 60) + (timeVal(1) * 60) + timeVal(2)
-      if(secs < (5 * 60)) 3 * secs
-      else if(secs == 50 * 60) (secs / 60) * 150
-      else ((secs / 60) + 1) * 150
-    }
   }
 }
