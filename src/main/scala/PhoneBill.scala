@@ -1,4 +1,4 @@
-import scala.collection.immutable
+package main.scala.PhoneBill
 
 object PhoneBill {
   def main(args: Array[String]): Unit = {
@@ -13,19 +13,16 @@ object PhoneBill {
                 00:01:07,407-234-090
                 00:05:01,709-080-080
                 00:05:00,407-234-090"""
-    println("The total cost is: " + solution(log))
+    println("The total cost is: " + solution(log2))
   }
 
   def solution(s: String): Int = {
-    val logs: Array[String] = s.split("\n").map(_.trim)
-    val logsMap = stringToTuples(logs) groupBy (_._1) mapValues (_ map (_._2))
-    val logsInSecs: Map[Int, Int] = logsMap.map(x => (numberToInt(x._1) -> x._2.sum))
-    val maxVal: (Int, Int) = logsInSecs.maxBy(_._2)
-    val maxTimes: Map[Int, Int] = maxMins(logsInSecs.toList).toMap
-    val maxTime = maxTimes.minBy(_._1)
-    println(maxTimes)
-    println(maxTime)
-    logsInSecs.map(x => costMap(x, maxTime)).sum
+    val logs: Array[String] = s.split("\n").map(_.trim) //Split into array of individual logs
+    val logsMap = stringToTuples(logs).groupBy(_._1).mapValues(_.map(_._2)) //Convering our logs into a map of tuples
+    val logsInSecs: Map[Int, Int] = logsMap.map(x => (numberToInt(x._1) -> x._2.sum)) //Converting all of our phone nos to ints and summing totals of seq(durations in seconds)
+    val maxTimes: Map[Int, Int] = maxMins(logsInSecs.toList).toMap //Finding all of the maxtimes (maxBy returns only 1)
+    val maxTime = maxTimes.minBy(_._1) //Finding the the max duration with the number with he lowest numerical value
+    logsInSecs.map(x => costMap(x, maxTime)).sum //Totalling the costs
   }
   //Turn data into a more manageable form
   def stringToTuples(logs: Array[String]): Seq[(String, Int)] = {
@@ -46,6 +43,7 @@ object PhoneBill {
     secs
   }
   //Return the maximum minutes (given maxBy only returns one!)
+  @annotation.tailrec
   def maxMins(logss: List[(Int, Int)], count: Int = 0): List[(Int, Int)] = {
     val logs = logss.sortBy(_._2)
     if(logss.size == (count)) logs
