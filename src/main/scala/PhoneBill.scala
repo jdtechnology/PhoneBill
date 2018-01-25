@@ -17,22 +17,11 @@ object PhoneBill {
   }
 
   def solution(s: String): Int = {
-//    val logs: Array[String] = s.split("\n").map(_.trim) //Split into array of individual logs
-//    val logsMap: Map[String, Seq[Int]] = stringToTuples(logs).groupBy(_._1).mapValues(_.map(_._2)) //Convering our logs into a map of tuples
-//    val logsInSecs: Map[Int, Int] = logsMap.map(x => (numberToInt(x._1) -> x._2.sum)) //Converting all of our phone nos to ints and summing totals of seq(durations in seconds)
-//    val maxTimes: Map[Int, Int] = maxMins(logsInSecs.toList).toMap //Finding all of the maxtimes (maxBy returns only 1)
-//    val maxTime: (Int, Int) = maxTimes.minBy(_._1) //Finding the the max duration with the number with he lowest numerical value
-//    println(mapLogs(Array("00:01:07,406-234-090", "00:05:01,701-080-080", "00:05:00,406-234-090")))
     val logsMap = splitLogsToMapOfIntInt(s)
     val numberToExclude = findMaxMinTimeNumValue(logsMap)
     logsMap.map(x => total(x, numberToExclude)).sum //Totalling the costs
   }
-//  def splitLogs(s: String): Array[String] = s.split("\n").map(_.trim)
-//  def mapLogs(logsArray: Array[String]): Map[String, Seq[Int]] = stringToTuples(logsArray).groupBy(_._1).mapValues(_.map(_._2))
-//  def numbersToInts(logsMap: Map[String, Seq[Int]]): Map[Int, Int] = logsMap.map(x => numberToInt(x._1) -> x._2.sum)
-//  def maxTimeLowestNumber(logs: Map[Int, Int]): (Int, Int) = {
-//    maxMins(logs.toList).toMap.minBy(_._1)
-//  }
+
   def splitLogsToMapOfIntInt(s: String): Map[Int, Int] = {
     val logsArray = s.split("\n").map(_.trim)
     val logsMap = stringToTuples(logsArray).groupBy(_._1).mapValues(_.map(_._2))
