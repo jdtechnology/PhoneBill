@@ -39,7 +39,9 @@ object PhoneBill {
     else if(secs % 60 == 0) { (secs / 60) * 150 }
     else { ((secs / 60) + 1) * 150 }
   }
-  //Turn data into a more manageable form
+  /**
+    *Turn data into a more manageable form
+    */
   def stringToTuples(logs: Array[String]): Seq[(String, Int)] = {
     for(log <- logs) yield {
       val left = log.split(",")(1).trim
@@ -47,17 +49,23 @@ object PhoneBill {
       (left, right)
     }
   }
-  //Turn the phone number into a string for comparison purposes
+  /**
+    *Turn the phone number into a string for comparison purposes
+    */
   def numberToInt(noString: String): Int = {
     noString.replaceAll("[\\s\\-]", "").toInt
   }
-  //Convert the full time string given into seconds as integers
+  /**
+    *Convert the full time string given into seconds as integers
+    */
   def durToSecs(tString: String): Int = {
     val timeVal: Array[Int] = tString.split(":").map(_.toInt)
     val secs = (timeVal(0) * 60 * 60) + (timeVal(1) * 60) + timeVal(2)
     secs
   }
-  //Return the maximum minutes (given maxBy only returns one!)
+  /**
+    *Return the maximum minutes (given maxBy only returns one!)
+    */
   @annotation.tailrec
   def maxMins(logss: List[(Int, Int)], count: Int = 0): List[(Int, Int)] = {
     val logs = logss.sortBy(_._2)
