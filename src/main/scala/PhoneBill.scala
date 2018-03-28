@@ -1,6 +1,7 @@
 package main.scala.PhoneBill
 
 object PhoneBill {
+
   def main(args: Array[String]): Unit = {
     //Test data (as given)
     val log = """00:01:07,406-234-090
