@@ -26,7 +26,7 @@ object PhoneBill {
   def splitLogsToMapOfIntInt(s: String): Map[Int, Int] = {
     val logsArray = s.split("\n").map(_.trim)
     val logsMap = stringToTuples(logsArray).groupBy(_._1).mapValues(_.map(_._2))
-    logsMap.map(x => (numberToInt(x._1) -> x._2.sum))
+    logsMap.map(x => numberToInt(x._1) -> x._2.sum)
   }
   def findMaxMinTimeNumValue(logs: Map[Int, Int]): (Int, Int) = {
     maxMins(logs.toList).toMap.minBy(_._1)
@@ -43,7 +43,7 @@ object PhoneBill {
   def stringToTuples(logs: Array[String]): Seq[(String, Int)] = {
     for(log <- logs) yield {
       val left = log.split(",")(1).trim
-      val right = toSecs(log.split(",")(0).trim)
+      val right = durToSecs(log.split(",")(0).trim)
       (left, right)
     }
   }
@@ -52,7 +52,7 @@ object PhoneBill {
     noString.replaceAll("[\\s\\-]", "").toInt
   }
   //Convert the full time string given into seconds as integers
-  def toSecs(tString: String): Int = {
+  def durToSecs(tString: String): Int = {
     val timeVal: Array[Int] = tString.split(":").map(_.toInt)
     val secs = (timeVal(0) * 60 * 60) + (timeVal(1) * 60) + timeVal(2)
     secs

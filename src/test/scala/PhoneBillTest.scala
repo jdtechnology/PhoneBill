@@ -1,9 +1,9 @@
-package main.test.scala.PhoneBill
+package main.test.scala.PhoneBillTest
 
 import main.scala.PhoneBill.PhoneBill
 import org.scalatest._
 
-class PhoneBill extends WordSpec with Matchers {
+class PhoneBillTest extends WordSpec with Matchers {
   val logs = """00:01:07,406-234-090
                 00:05:01,701-080-080
                 00:05:00,406-234-090"""
@@ -66,10 +66,10 @@ class PhoneBill extends WordSpec with Matchers {
   }
   "toSecs" should {
     "return an Integer after converting a time string in format hh:mm:ss to seconds (given valid params)" in  {
-      PhoneBill.toSecs("00:01:07") shouldBe 67
+      PhoneBill.durToSecs("00:01:07") shouldBe 67
     }
     "also another test with hours for good measure" in {
-      PhoneBill.toSecs("2:05:00") shouldBe 7500
+      PhoneBill.durToSecs("2:05:00") shouldBe 7500
     }
   }
   "maxMins" should {
